@@ -56,6 +56,10 @@ export class GameOfLife extends HTMLElement {
     }
 
     get fps() {
+        if (!this.useAnimation()) {
+            // If the viewer has prefer reduced motion set we pin the speed to 0.5 fps.
+            return 2000;
+        }
         return 1000 / Math.max(1, Number.parseInt(this.getAttribute(GameOfLife.attr.fps) ?? "12", 10));
     }
 
@@ -69,25 +73,16 @@ export class GameOfLife extends HTMLElement {
         stylesheet.replaceSync(GameOfLife.css);
         shadowroot.adoptedStyleSheets = [stylesheet];
 
-        // const htmlContainer = document.createElement("figure");
-
-        // shadowroot.appendChild(htmlContainer);
-
         const htmlCanvas = document.createElement("canvas");
-        // htmlContainer.setAttribute("width", String(this.width));
-        // htmlContainer.setAttribute("height", String(this.height));
 
         htmlCanvas.setAttribute("width", String(this.width));
         htmlCanvas.setAttribute("height", String(this.height));
         htmlCanvas.setAttribute("style", String(this.style));
 
-        // htmlContainer.appendChild(htmlCanvas);
         shadowroot.appendChild(htmlCanvas);
-
 
         const offscreen = htmlCanvas.transferControlToOffscreen();
         const worker = new GOLWorker();
-
 
         worker.postMessage({ 
             canvas: offscreen,
