@@ -1,0 +1,39 @@
+{
+  "name": "@jedidiah/game-of-life-wc",
+  "private": false,
+  "version": "0.0.1",
+  "type": "module",
+  "main": "dist/game-of-life.js",
+  "description": "A web component to render Conway's Game of Life in an offscreen canvas.",
+  "author": {
+    "name": "Jedidiah",
+    "email": "hello@jedidiah.dev",
+    "url": "https://jedidiah.dev"
+  },
+  "bugs": {
+    "url": "https://github.com/Jedidiah/game-of-life-wc/issues"
+  },
+  "files": [
+    "./dist"
+  ],
+  "repository": {
+    "url": "https://github.com/Jedidiah/game-of-life-wc"
+  },
+  "license": "CC BY-SA 4.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "publish": "np"
+  },
+  "devDependencies": {
+    "typescript": "~5.6.2",
+    "vite": "^6.0.5",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "np": "^10.1.0"
+  },
+  "keywords": ["web-component", "game-of-life", "canvas", "human-made", "noAI"]
+}
