@@ -101,16 +101,16 @@ describe('advanceCellGenerationForGrid', () => {
   });
 });
 
-describe('golGenerator', () => {
-  const gol = gameOfLife();
-  console.table(gol.next().value);
-  console.table(gol.next().value);
-  console.table(gol.next().value);
-  console.table(gol.next().value);
-  console.table(gol.next().value);
-  console.table(gol.next().value);
-  console.table(gol.next().value);
-  console.table(gol.next().value);
-  console.table(gol.next().value);
-  console.table(gol.next().value);
-})
+// describe('golGenerator', () => {
+//   const gol = gameOfLife();
+//   console.table(gol.next().value);
+//   console.table(gol.next().value);
+//   console.table(gol.next().value);
+//   console.table(gol.next().value);
+//   console.table(gol.next().value);
+//   console.table(gol.next().value);
+//   console.table(gol.next().value);
+//   console.table(gol.next().value);
+//   console.table(gol.next().value);
+//   console.table(gol.next().value);
+// })
