@@ -14,7 +14,7 @@
     "url": "https://github.com/Jedidiah/game-of-life-wc/issues"
   },
   "files": [
-    "./dist"
+    "./dist", "./demo-images"
   ],
   "repository": {
     "url": "https://github.com/Jedidiah/game-of-life-wc"
