@@ -1,7 +1,7 @@
 {
   "name": "@jedidiah/game-of-life-wc",
   "private": false,
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "main": "dist/game-of-life.js",
   "description": "A web component to render Conway's Game of Life in an offscreen canvas.",
