@@ -26,6 +26,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
+    "prepublish": "npm run build",
     "publish": "np"
   },
   "devDependencies": {

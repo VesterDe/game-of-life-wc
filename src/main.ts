@@ -17,7 +17,12 @@ export class GameOfLife extends HTMLElement {
     };
 
     static css = `
+        :host {
+            display: block;
+        }
         canvas {
+            width: 100%;
+            height: auto;
             margin: 0;
             padding: 0;
         }
@@ -75,9 +80,11 @@ export class GameOfLife extends HTMLElement {
 
         const htmlCanvas = document.createElement("canvas");
 
-        htmlCanvas.setAttribute("width", String(this.width));
-        htmlCanvas.setAttribute("height", String(this.height));
-        htmlCanvas.setAttribute("style", String(this.style));
+        const hostWidth = shadowroot.host?.clientWidth === 0 ? 300 : shadowroot.host?.clientWidth;
+        const hostHeight = shadowroot.host?.clientHeight === 0 ? 150 : shadowroot.host?.clientHeight;
+
+        htmlCanvas.setAttribute("width", this.width ? String(this.width) : String(hostWidth));
+        htmlCanvas.setAttribute("height", this.height ? String(this.height) : String(hostHeight));
 
         shadowroot.appendChild(htmlCanvas);
 

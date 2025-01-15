@@ -44,9 +44,9 @@ See `demo.html` for more examples.
 
 - `color2` - This is the colour the live cells will be drawn in <br/>_Default:_ `cellSize="rgba(0, 200, 0, 1)"`
 
-- `width` - The width of the canvas<br/>_Default:_ `width="300"`
+- `width` - The width of the canvas (not the width it will be rendered)<br/>_Default:_ `width="300"`
 
-- `height` - The height of the canvas<br/>_Default:_ `height="150"`
+- `height` - The height of the canvas  (not the width it will be rendered)<br/>_Default:_ `height="150"`
 
 - `hueRotate` - Instead of setting color2 you can just have all the colours <br/>_Default:_ `hueRotate="false"`
 
