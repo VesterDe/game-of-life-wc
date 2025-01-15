@@ -36,7 +36,7 @@ function* o(e = {}) {
   for (yield s; ; )
     s = u(i, t, z(s)), yield s;
 }
-const M = 1e3 / 12, A = 3, f = "rgba(0, 20, 0, 1)", w = "rgba(0, 20, 0, 0.3)", m = "rgba(0, 200, 0, 1)";
+const A = 1e3 / 12, M = 3, f = "rgba(0, 20, 0, 1)", w = "rgba(0, 20, 0, 0.3)", m = "rgba(0, 200, 0, 1)";
 let n;
 class L {
   constructor({ data: t }) {
@@ -51,7 +51,7 @@ class L {
     a(this, "gen");
     a(this, "isPaused");
     a(this, "hueRotate");
-    this.canvas = t.canvas, this.ctx = this.canvas.getContext("2d"), this.minInterval = t.minInterval ?? M, this.cellSize = t.cellSize ?? A, this.color1 = t.color1 ?? f, this.color1Tick = t.color1Tick ?? w, this.color2 = t.color2 ?? m, this.lastDraw = 0, this.isPaused = !0, this.hueRotate = !!t.hueRotate, this.fillCanvas(this.color1), this.gen = o({ width: this.width, height: this.height }), this.draw(), this.isPaused = !!t.paused, this.draw();
+    this.canvas = t.canvas, this.ctx = this.canvas.getContext("2d"), this.minInterval = t.minInterval ?? A, this.cellSize = t.cellSize ?? M, this.color1 = t.color1 ?? f, this.color1Tick = t.color1Tick ?? w, this.color2 = t.color2 ?? m, this.lastDraw = 0, this.isPaused = !0, this.hueRotate = !!t.hueRotate, this.fillCanvas(this.color1), this.gen = o({ width: this.width, height: this.height }), this.draw(), this.isPaused = !!t.paused, this.draw();
   }
   get width() {
     return Math.floor(this.canvas.width / this.cellSize);
@@ -140,7 +140,7 @@ const r = class r extends HTMLElement {
     return !!this.getAttribute(r.attr.hueRotate);
   }
   get fps() {
-    return 1e3 / Math.max(1, Number.parseInt(this.getAttribute(r.attr.fps) ?? "12", 10));
+    return this.useAnimation() ? 1e3 / Math.max(1, Number.parseInt(this.getAttribute(r.attr.fps) ?? "12", 10)) : 2e3;
   }
   get shouldShowControls() {
     return !!this.getAttribute(r.attr.controls);

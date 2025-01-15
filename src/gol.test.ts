@@ -1,5 +1,5 @@
 import { expect, test, describe } from 'vitest'
-import { createGrid, randomCell, ruleOverpopulation, ruleUnderpopulation, ruleReproduction, getTotalNeighbours, getSubGrid, advanceCellGenerationForGrid, gameOfLife, type Grid } from './gol';
+import { createGrid, randomCell, ruleOverpopulation, ruleUnderpopulation, ruleReproduction, getTotalNeighbours, getSubGrid, advanceCellGenerationForGrid, type Grid } from './gol';
 
 describe("createGrid", () => {
   test('it returns a square grid', () => {
