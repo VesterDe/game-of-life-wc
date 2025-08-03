@@ -1,4 +1,4 @@
-import { gameOfLife } from "./gol";
+import { gameOfLife, Grid, advanceGrid } from "./gol";
 
 export const DEFAULT_MIN_INTERVAL = 1000 / 12;
 export const DEFAULT_CELL_SIZE = 3;
@@ -18,8 +18,11 @@ type GOLMessageEvent = MessageEvent<{
     paused?: boolean;
     width?: number;
     height?: number;
-    action?: "restart" | "play" | "pause";
+    action?: "restart" | "play" | "pause" | "toggleCell";
     hueRotate?: boolean;
+    interactive?: boolean;
+    x?: number;
+    y?: number;
 }>
 
 export class GOL {
@@ -34,6 +37,8 @@ export class GOL {
     gen: Generator;
     isPaused: boolean;
     hueRotate: boolean;
+    interactive: boolean;
+    currentGrid: Grid;
 
     constructor({ data }: GOLMessageEvent) {
         this.canvas = data.canvas;
@@ -46,9 +51,11 @@ export class GOL {
         this.lastDraw = 0;
         this.isPaused = true;
         this.hueRotate = Boolean(data.hueRotate);
+        this.interactive = Boolean(data.interactive);
 
         this.fillCanvas(this.color1);
         this.gen = gameOfLife({ width: this.width, height: this.height });
+        this.currentGrid = this.gen.next().value;
         this.draw();
         this.isPaused = Boolean(data.paused);
         this.draw();
@@ -105,10 +112,17 @@ export class GOL {
             }
             this.lastDraw = tick;
             this.fillCanvas(this.color1Tick);
-            const iteration = this.gen.next().value;
+            
+            if (tick !== 0) {
+                if (this.interactive) {
+                    this.currentGrid = advanceGrid(this.currentGrid);
+                } else {
+                    this.currentGrid = this.gen.next().value;
+                }
+            }
 
-            for (let row = 0; row < iteration.length; row++) {
-                const column = iteration[row];
+            for (let row = 0; row < this.currentGrid.length; row++) {
+                const column = this.currentGrid[row];
                 for (let cellIndex = 0; cellIndex < column.length; cellIndex++) {
                     const cell = column[cellIndex];
                     if (cell) {
@@ -123,12 +137,35 @@ export class GOL {
         }
     }
 
+    toggleCell(x: number, y: number) {
+        if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
+            this.currentGrid[y][x] = this.currentGrid[y][x] === 1 ? 0 : 1;
+            this.redraw();
+        }
+    }
+
+    redraw() {
+        this.fillCanvas(this.color1Tick);
+        for (let row = 0; row < this.currentGrid.length; row++) {
+            const column = this.currentGrid[row];
+            for (let cellIndex = 0; cellIndex < column.length; cellIndex++) {
+                const cell = column[cellIndex];
+                if (cell) {
+                    this.fillCell(cellIndex * this.cellSize, row * this.cellSize, this.cellSize, this.cellSize, this.color2);
+                }
+            }
+        }
+    }
+
 }
 
 self.onmessage = (evt: GOLMessageEvent) => {
     if (evt.data.canvas) {
         gol = new GOL(evt);
     } else {
+        if (gol && evt.data.action === "toggleCell" && typeof evt.data.x === 'number' && typeof evt.data.y === 'number') {
+            gol.toggleCell(evt.data.x, evt.data.y);
+        }
         if (gol && evt.data.paused !== undefined) {
             gol.paused = evt.data.paused;
         }

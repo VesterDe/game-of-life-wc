@@ -14,6 +14,7 @@ export class GameOfLife extends HTMLElement {
         style: "style",
         controls: "controls",
         hueRotate: "hueRotate",
+        interactive: "interactive",
     };
 
     static css = `
@@ -72,6 +73,10 @@ export class GameOfLife extends HTMLElement {
         return Boolean(this.getAttribute(GameOfLife.attr.controls));
     }
 
+    get interactive() {
+        return Boolean(this.getAttribute(GameOfLife.attr.interactive));
+    }
+
     connectedCallback() {
         const shadowroot = this.attachShadow({ mode: "open" });
         const stylesheet = new CSSStyleSheet();
@@ -99,7 +104,52 @@ export class GameOfLife extends HTMLElement {
             color2: this.color2,
             hueRotate: this.hueRotate,
             minInterval: this.fps,
+            interactive: this.interactive,
         },[offscreen]);
+
+        if (this.interactive) {
+            this.setupInteractiveEvents(htmlCanvas, worker);
+        }
+    }
+
+    private setupInteractiveEvents(htmlCanvas: HTMLCanvasElement, worker: Worker) {
+        let isMouseDown = false;
+        
+        const getCellCoordinates = (event: MouseEvent) => {
+            const rect = htmlCanvas.getBoundingClientRect();
+            const scaleX = htmlCanvas.width / rect.width;
+            const scaleY = htmlCanvas.height / rect.height;
+            
+            const x = Math.floor(((event.clientX - rect.left) * scaleX) / this.cellSize);
+            const y = Math.floor(((event.clientY - rect.top) * scaleY) / this.cellSize);
+            
+            return { x, y };
+        };
+
+        const toggleCell = (event: MouseEvent) => {
+            const { x, y } = getCellCoordinates(event);
+            worker.postMessage({ action: "toggleCell", x, y });
+        };
+
+        htmlCanvas.addEventListener("mousedown", (event) => {
+            event.preventDefault();
+            isMouseDown = true;
+            toggleCell(event);
+        });
+
+        htmlCanvas.addEventListener("mousemove", (event) => {
+            if (isMouseDown) {
+                toggleCell(event);
+            }
+        });
+
+        htmlCanvas.addEventListener("mouseup", () => {
+            isMouseDown = false;
+        });
+
+        htmlCanvas.addEventListener("mouseleave", () => {
+            isMouseDown = false;
+        });
     }
 }
 

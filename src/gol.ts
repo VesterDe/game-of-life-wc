@@ -83,6 +83,10 @@ export function advanceCellGenerationForGrid(grid: Grid): CellCreator {
   };
 }
 
+export function advanceGrid(grid: Grid): Grid {
+  return createGrid(grid.length, grid[0]?.length || 0, advanceCellGenerationForGrid(grid));
+}
+
 export function* gameOfLife(
   settings: { height?: number; width?: number } = {}
 ) {
