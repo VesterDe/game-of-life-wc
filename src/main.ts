@@ -126,29 +126,32 @@ export class GameOfLife extends HTMLElement {
             return { x, y };
         };
 
-        const toggleCell = (event: MouseEvent) => {
+        const activateCell = (event: MouseEvent) => {
             const { x, y } = getCellCoordinates(event);
-            worker.postMessage({ action: "toggleCell", x, y });
+            worker.postMessage({ action: "activateCell", x, y });
         };
 
         htmlCanvas.addEventListener("mousedown", (event) => {
             event.preventDefault();
             isMouseDown = true;
-            toggleCell(event);
+            worker.postMessage({ action: "pauseDrag" });
+            activateCell(event);
         });
 
         htmlCanvas.addEventListener("mousemove", (event) => {
             if (isMouseDown) {
-                toggleCell(event);
+                activateCell(event);
             }
         });
 
         htmlCanvas.addEventListener("mouseup", () => {
             isMouseDown = false;
+            worker.postMessage({ action: "resumeDrag" });
         });
 
         htmlCanvas.addEventListener("mouseleave", () => {
             isMouseDown = false;
+            worker.postMessage({ action: "resumeDrag" });
         });
     }
 }

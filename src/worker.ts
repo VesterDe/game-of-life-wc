@@ -18,7 +18,7 @@ type GOLMessageEvent = MessageEvent<{
     paused?: boolean;
     width?: number;
     height?: number;
-    action?: "restart" | "play" | "pause" | "toggleCell";
+    action?: "restart" | "play" | "pause" | "toggleCell" | "activateCell" | "pauseDrag" | "resumeDrag";
     hueRotate?: boolean;
     interactive?: boolean;
     x?: number;
@@ -144,6 +144,13 @@ export class GOL {
         }
     }
 
+    activateCell(x: number, y: number) {
+        if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
+            this.currentGrid[y][x] = 1;
+            this.redraw();
+        }
+    }
+
     redraw() {
         this.fillCanvas(this.color1Tick);
         for (let row = 0; row < this.currentGrid.length; row++) {
@@ -165,6 +172,15 @@ self.onmessage = (evt: GOLMessageEvent) => {
     } else {
         if (gol && evt.data.action === "toggleCell" && typeof evt.data.x === 'number' && typeof evt.data.y === 'number') {
             gol.toggleCell(evt.data.x, evt.data.y);
+        }
+        if (gol && evt.data.action === "activateCell" && typeof evt.data.x === 'number' && typeof evt.data.y === 'number') {
+            gol.activateCell(evt.data.x, evt.data.y);
+        }
+        if (gol && evt.data.action === "pauseDrag") {
+            gol.paused = true;
+        }
+        if (gol && evt.data.action === "resumeDrag") {
+            gol.paused = false;
         }
         if (gol && evt.data.paused !== undefined) {
             gol.paused = evt.data.paused;
